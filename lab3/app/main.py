@@ -5,10 +5,9 @@ from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker, Asyn
 from app.controllers.user_controller import UserController
 from app.dependencies import provide_user_repository, provide_user_service
 
-# Настройка базы данных - ИСПОЛЬЗУЕМ ТВОИ ДАННЫЕ ИЗ ЛР2
 DATABASE_URL = "postgresql+asyncpg://postgres:postgres@192.168.99.100:5432/postgres"
 
-# Создаем асинхронный движок БД
+
 engine = create_async_engine(DATABASE_URL, echo=True)
 async_session_factory = async_sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
 
@@ -43,5 +42,6 @@ if __name__ == "__main__":
     print("   PUT    /users/{id}     - обновить пользователя")
     print("   DELETE /users/{id}     - удалить пользователя")
     print("\nДля остановки Ctrl+C")
+
 
     uvicorn.run(app, host="0.0.0.0", port=8000)
