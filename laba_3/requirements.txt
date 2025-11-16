@@ -1,0 +1,7 @@
+asyncpg
+uvicorn
+pydantic
+psycopg
+sqlalchemy
+litestar
+pydantic[email]

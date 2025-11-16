@@ -1,7 +1,0 @@
-litestar[standard]
-sqlalchemy
-asyncpg
-alembic
-pydantic
-email-validator
-uvicorn
