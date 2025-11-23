@@ -4,9 +4,9 @@ from litestar.di import Provide
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession, async_sessionmaker
 
 
-from app.controllers.user_controller import UserController
-from app.repositories.user_repository import UserRepository
-from app.services.user_service import UserService
+from controllers.user_controller import UserController
+from repositories.user_repository import UserRepository
+from services.user_service import UserService
 
 
 DATABASE_URL = "postgresql+asyncpg://postgres:postgres@192.168.99.100:5432/postgres"
@@ -21,7 +21,7 @@ async_session_factory = async_sessionmaker(
     expire_on_commit=False
 )
 
-async def provide_db_session() -> AsyncSession:
+async def provide_db_session():
     """Провайдер сессии базы данных"""
     async with async_session_factory() as session:
         try:
@@ -49,11 +49,11 @@ app = Litestar(
 
 if __name__ == "__main__":
     import uvicorn
-    print("Запуск Litestar приложения на http://0.0.0.0:8000")
+    print("Запуск Litestar приложения на http://localhost:8000")
     print("Доступные эндпоинты:")
     print("  GET    /users - список пользователей")
     print("  POST   /users - создать пользователя")
     print("  GET    /users/{id} - получить пользователя по ID")
     print("  PUT    /users/{id} - обновить пользователя")
     print("  DELETE /users/{id} - удалить пользователя")
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    uvicorn.run(app, host="localhost", port=8000)

@@ -5,3 +5,11 @@ psycopg
 sqlalchemy
 litestar
 pydantic[email]
+
+# Для тестирования
+pytest
+pytest-asyncio
+pytest-cov
+httpx
+freezegun
+requests

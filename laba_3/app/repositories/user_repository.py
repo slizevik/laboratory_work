@@ -1,8 +1,8 @@
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from typing import List, Optional, Dict, Any
-from app.models.user import User
-from app.schemas.user import UserCreate, UserUpdate
+from models.user import User
+from schemas.user import UserCreate, UserUpdate
 
 
 class UserRepository:
@@ -37,8 +37,7 @@ class UserRepository:
         """Создать нового пользователя"""
         user = User(
             username=user_data.username,
-            email=user_data.email,
-            description=user_data.description if hasattr(user_data, 'description') else None
+            email=user_data.email
         )
         session.add(user)
         await session.commit()

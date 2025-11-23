@@ -1,11 +1,11 @@
 from litestar import Controller, get, post, put, delete
 from litestar.di import Provide
-from litestar.params import Parameter
+from litestar.params import Parameter, Body
 from litestar.exceptions import NotFoundException, ValidationException
 from litestar.status_codes import HTTP_204_NO_CONTENT
 from typing import List
-from app.services.user_service import UserService
-from app.schemas.user import UserCreate, UserUpdate, UserResponse
+from services.user_service import UserService
+from schemas.user import UserCreate, UserUpdate, UserResponse
 
 
 class UserController(Controller):
@@ -41,15 +41,15 @@ class UserController(Controller):
             "count": count
         }
 
-    @post()
+    @post("/create_user")
     async def create_user(
             self,
             user_service: UserService,
-            user_data: UserCreate,
+            data: UserCreate = Body(media_type="application/json"),
     ) -> UserResponse:
         """Создать нового пользователя"""
         try:
-            user = await user_service.create(user_data)
+            user = await user_service.create(data)
             return UserResponse.model_validate(user)
         except ValueError as e:
             raise ValidationException(detail=str(e))
