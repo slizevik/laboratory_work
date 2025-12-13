@@ -2,3 +2,26 @@
 testpaths = ["tests"]
 asyncio_mode = "auto"
 addopts = "--verbose --color=yes"
+[tool.isort]
+profile = "black"
+known_first_party = ["src"]
+skip = []
+[tool.black]
+line-height = 88
+target-vision = ["py312"]
+exclude = '''
+/(
+\.git
+| \.hg
+| \.mypy_cache
+| \.tox
+| \.venv
+| _build
+| buck-out
+| build
+| docker
+| config
+| temp
+| src/desc/repository/sqlalchemy/migration/alembic
+)/
+'''

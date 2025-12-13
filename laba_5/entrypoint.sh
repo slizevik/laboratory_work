@@ -1,11 +1,9 @@
 #!/bin/bash
 
-set -e
+while ! nc -z $DB_HOST $DB_PORT; do
+    sleep 0.1
+done
 
-# Запускаем миграции Alembic (если они есть)
-echo "Запуск миграций Alembic..."
-python -m alembic upgrade head
+alembic upgrade head
 
-# Запускаем приложение
-echo "Запуск приложения..."
-exec python main.py
+exec "$@"
