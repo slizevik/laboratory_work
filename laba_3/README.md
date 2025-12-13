@@ -4,6 +4,6 @@
 
 2.Установите зависимости: pip install -r requirements.txt
 
-3.Запустите приложение: python -m app.main
+3.Запустите приложение: python main.py
 
 4.Откройте в браузере: http://localhost:8000/users
