@@ -1,9 +1,34 @@
-# Лабораторная работа №5
+# Лабораторная работа №6 инструкция
+## 1. Сборка и запуск
+powershell
+cd "C:\DATA BOSS\laba_6_git"
+docker compose build
+docker compose up -d
 
-1.Активируйте окружение: .venv\Scripts\activate (Windows) или source .venv\Scripts\activate (Linux/Mac)
 
-2.Установите зависимости: pip install -r requirements.txt
+## 2. Проверка статуса (подождите ~60 сек)
+powershell
+docker compose ps
+docker compose logs app
 
-3.Запустите приложение: python main.py
 
-4.Откройте в браузере: http://localhost:8000/users
+## 3. Запуск Producer
+powershell
+docker compose exec app python producer.py
+
+
+## 4. Тестирование API
+powershell
+# Проверка Users
+Invoke-WebRequest -Uri http://localhost:8000/users -UseBasicParsing | Select-Object -ExpandProperty Content
+
+# Проверка Products
+Invoke-WebRequest -Uri http://localhost:8000/products -UseBasicParsing | Select-Object -ExpandProperty Content
+
+# Проверка Orders
+Invoke-WebRequest -Uri http://localhost:8000/orders -UseBasicParsing | Select-Object -ExpandProperty Content
+
+
+## 5. Остановка
+powershell нажать Ctrl C
+
