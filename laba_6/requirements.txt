@@ -1,0 +1,19 @@
+asyncpg
+uvicorn
+pydantic
+psycopg
+psycopg2-binary>=2.9.9
+sqlalchemy
+litestar
+pydantic[email]
+
+# Для тестирования
+pytest
+pytest-asyncio
+pytest-cov
+httpx
+freezegun
+requests
+faststream[rabbit]>=0.5.0
+aio-pika>=9.0.0
+alembic
