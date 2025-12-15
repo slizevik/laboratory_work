@@ -1,7 +1,7 @@
 # Лабораторная работа №6 инструкция
 ## 1. Сборка и запуск
 powershell
-cd "C:\DATA BOSS\laba_6_git"
+
 docker compose build
 docker compose up -d
 
