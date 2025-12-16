@@ -16,7 +16,7 @@ from services.user_service import UserService
 from services.product_service import ProductService
 from services.order_service import OrderService
 
-# Для Docker Toolbox: 192.168.99.100 — правильный адрес
+
 DATABASE_URL = "postgresql+asyncpg://postgres:postgres@192.168.99.100:5432/postgres"
 
 engine = create_async_engine(DATABASE_URL, echo=False)
