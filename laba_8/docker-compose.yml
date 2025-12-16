@@ -1,0 +1,93 @@
+﻿version: '3.8'
+
+services:
+  postgres:
+    image: postgres:13
+    environment:
+      POSTGRES_DB: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    environment:
+      RABBITMQ_DEFAULT_USER: app
+      RABBITMQ_DEFAULT_PASS: app
+      RABBITMQ_DEFAULT_VHOST: local
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq/mnesia
+
+  redis:
+    image: redis:alpine
+    ports:
+      - "6379:6379"
+    command: ["redis-server", "--appendonly", "yes"]
+
+  app:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=postgresql+asyncpg://postgres:postgres@postgres:5432/postgres
+      - RABBITMQ_URL=amqp://app:app@rabbitmq:5672/local
+      - REDIS_URL=redis://redis:6379/0
+      - HOST=0.0.0.0
+      - PORT=8000
+    volumes:
+      - .:/app
+    restart: unless-stopped
+    depends_on:
+      - postgres
+      - rabbitmq
+
+  taskiq-worker:
+    build: .
+    command: ["taskiq", "worker", "taskiq_config:broker"]
+    environment:
+      - DATABASE_URL=postgresql+asyncpg://postgres:postgres@postgres:5432/postgres
+      - RABBITMQ_URL=amqp://app:app@rabbitmq:5672/local
+      - REDIS_URL=redis://redis:6379/0
+    volumes:
+      - .:/app
+    depends_on:
+      - postgres
+      - rabbitmq
+      - redis
+
+  taskiq-scheduler:
+    build: .
+    command: ["taskiq", "scheduler", "taskiq_config:scheduler", "--skip-first-run"]
+    environment:
+      - DATABASE_URL=postgresql+asyncpg://postgres:postgres@postgres:5432/postgres
+      - RABBITMQ_URL=amqp://app:app@rabbitmq:5672/local
+      - REDIS_URL=redis://redis:6379/0
+    volumes:
+      - .:/app
+    depends_on:
+      - postgres
+      - rabbitmq
+      - redis
+
+  producer:
+    build: .
+    command: python producer.py
+    environment:
+      - RABBITMQ_URL=amqp://app:app@rabbitmq:5672/local
+    volumes:
+      - .:/app
+    depends_on:
+      - rabbitmq
+      - app
+    profiles:
+      - producer
+
+volumes:
+  postgres_data:
+  rabbitmq_data:
